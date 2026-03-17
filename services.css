@@ -1,0 +1,17 @@
+/* Services headings + list tweaks (FoxWiser / Fox LAW) */
+
+/* Make service titles bold and use palette Slate (subheading color) */
+.svc-body h3{
+  font-family: var(--sans) !important;
+  font-weight: 700 !important;
+  color: var(--subhead) !important;
+}
+
+.service-title{
+  color: inherit;
+  text-decoration: none;
+}
+
+.service-title:hover{
+  color: var(--action-hover);
+}

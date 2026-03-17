@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Öngörüsel Analitik — FOX LAW</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=IBM+Plex+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="service-detail.css" rel="stylesheet"/>
+</head>
+<body>
+<nav>
+<a aria-label="FOX LAW" class="logo" href="index.html">
+<img alt="FOX LAW logo" class="logo-img" data-logo-dark="Logo_V3_Dark.svg" data-logo-light="Logo_V3_Light.svg" src="Logo_V3_Light.svg"/>
+<span class="logo-text">FOX LAW</span>
+</a>
+<ul aria-label="Üst menü" class="nav-desktop">
+<li aria-hidden="true" class="nav-hover-indicator"></li>
+<li><a href="index.html">Ana Sayfa</a></li>
+<li><a href="index.html#services">Hizmetler</a></li>
+<li><a class="nav-cta" href="index.html#contact">Konuşalım</a></li>
+</ul>
+<button aria-label="Tema değiştir" class="theme-toggle" id="themeToggle" title="Light / Dark">
+<svg aria-hidden="true" class="sun" viewbox="0 0 24 24"><path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z"></path><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+<svg aria-hidden="true" class="moon" viewbox="0 0 24 24"><path d="M21 12.6A8.5 8.5 0 1 1 11.4 3a6.5 6.5 0 1 0 9.6 9.6Z"></path></svg>
+</button>
+</nav>
+<main>
+<div class="container">
+<div class="breadcrumb">Hizmetler / Öngörüsel Analitik</div>
+<h1 class="page-title">Öngörüsel Analitik</h1>
+<p class="page-lead">Geçmiş verilerinizden anlamlı içgörüler çıkararak karar destek sistemleri geliştiriyoruz. Bu; dava/iş yükü tahmini, risk skorlama, süreç performans analizi ve trend takibi gibi alanları kapsayabilir.</p>
+<section class="detail-card">
+<h2>Kapsam</h2>
+<div class="detail-grid">
+<div class="detail-item">
+<h3>Ne yapıyoruz?</h3>
+<ul>
+<li>Veri modelleme ve özellik mühendisliği ile güvenilir bir temel kurarız.</li>
+<li>KPI’ları ve hedef değişkenleri netleştirerek model amaçlarını tanımlarız.</li>
+<li>Model eğitim/validasyon süreçlerini kurar, sapma (drift) takibini planlarız.</li>
+<li>Dashboard/raporlama katmanıyla sonuçları görünür kılarız.</li>
+</ul>
+</div>
+<div class="detail-item">
+<h3>Çıktılar</h3>
+<ul>
+<li>Tahmin/risk skoru üreten model(ler)</li>
+<li>KPI panosu ve rapor seti</li>
+<li>Model izleme planı (drift, performans)</li>
+<li>Dokümantasyon + sürdürülebilir güncelleme önerisi</li>
+</ul>
+</div>
+</div>
+<div class="actions">
+<a class="btn btn-primary" href="mailto:hello@foxwiser.com?subject=Öngörüsel Analitik">Teklif iste</a>
+<a class="btn btn-secondary" href="index.html#services">Tüm hizmetlere dön</a>
+</div>
+</section>
+</div>
+</main>
+<footer>
+<a aria-label="FOX LAW" class="footer-logo" href="index.html">
+<img alt="FOX LAW logo" class="footer-logo-img" data-logo-dark="Logo_V3_Dark.svg" data-logo-light="Logo_V3_Light.svg" src="Logo_V3_Light.svg"/>
+<span class="logo-text">FOX LAW</span>
+</a>
+<span class="footer-mid">Istanbul, Türkiye</span>
+<span class="footer-right">© 2025 FoxWiser</span>
+</footer>
+<script>
+  // Theme
+  const root = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+
+  const updateLogos = () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    document.querySelectorAll('img[data-logo-light]').forEach(img => {
+      img.src = isDark ? img.dataset.logoDark : img.dataset.logoLight;
+    });
+  };
+
+  const applyTheme = (t) => {
+    if (t === 'dark') root.setAttribute('data-theme','dark');
+    else root.removeAttribute('data-theme');
+    updateLogos();
+  };
+
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) applyTheme(savedTheme);
+  else updateLogos();
+
+  toggle?.addEventListener('click', () => {
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    applyTheme(next === 'dark' ? 'dark' : 'light');
+    localStorage.setItem('theme', next);
+  });
+
+  // Hover indicator
+  (() => {
+    const nav = document.querySelector('.nav-desktop');
+    const indicator = nav?.querySelector('.nav-hover-indicator');
+    if (!nav || !indicator) return;
+
+    const links = Array.from(nav.querySelectorAll('a')).filter(a => !a.classList.contains('nav-cta'));
+    let last = null;
+
+    const moveTo = (el) => {
+      const navRect = nav.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      indicator.style.width = r.width + 'px';
+      indicator.style.left = (r.left - navRect.left) + 'px';
+    };
+
+    const activate = (el) => {
+      last = el;
+      nav.classList.add('has-hover');
+      moveTo(el);
+    };
+
+    links.forEach(a => {
+      a.addEventListener('mouseenter', () => activate(a));
+      a.addEventListener('focus', () => activate(a));
+    });
+
+    nav.addEventListener('mouseleave', () => nav.classList.remove('has-hover'));
+    window.addEventListener('resize', () => { if (last) moveTo(last); });
+  })();
+</script>
+</body>
+</html>
