@@ -5,6 +5,14 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>FOX LAW — Legal AI</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon_16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon_32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="favicon_48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon_180.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#0F172A">
+
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=IBM+Plex+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
@@ -110,7 +118,7 @@ body {
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 5vw; height: 88px;
+  padding: 0 5vw; height: 96px;
   background: var(--nav-bg);
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
@@ -125,7 +133,7 @@ nav {
   z-index: 201;
 }
 .logo-img {
-  height: clamp(64px, 4.8vw, 92px);
+  height: clamp(56px, 4.2vw, 76px);
 width: auto;
   display: block;
 }
@@ -584,13 +592,15 @@ html[data-theme="dark"] .about-label,
 html[data-theme="dark"] .stat-label {
   text-shadow: 0 1px 0 rgba(0,0,0,0.35);
 }
+
+.logo-text{display:none !important;}
 </style>
 </head>
 <body>
 <!-- NAV -->
 <nav>
 <a aria-label="FOX LAW" class="logo" href="index.html">
-<img alt="FOX LAW logo" class="logo-img" data-logo-dark="Logo_V3_Dark.svg" data-logo-light="Logo_V3_Light.svg" src="Logo_V3_Light.svg"/>
+<img alt="FoxWiser logo" class="logo-img" data-logo-dark="foxwiser_logo_mono_light_224h.png" data-logo-light="foxwiser_logo_mono_224h.png" src="foxwiser_logo_mono_224h.png"/>
 <span class="logo-text">FOX LAW</span>
 </a>
 <!-- Desktop -->
@@ -621,7 +631,7 @@ html[data-theme="dark"] .stat-label {
 <!-- HERO -->
 <section class="hero">
 <span class="hero-eyebrow">Legal AI · Workflow Automation</span>
-<h1>Hukuk için<br/>düşünen yazılım.</h1>
+<h1>Hukuk için<br/><em>düşünen</em> yazılım.</h1>
 <p class="hero-sub">
     Fox LAW, yapay zeka teknolojilerini mevzuat ve hukuk iş akışlarına entegre ederek
     organizasyonların daha akıllı, daha hızlı karar almasını sağlar.
@@ -638,7 +648,7 @@ html[data-theme="dark"] .stat-label {
 <span class="intro-label">Yaklaşımımız</span>
 <p class="intro-text">
       Yapay zeka bir araçtır. Doğru soruları sormak,
-      doğru mimariyi kurmak ve insanla birlikte çalışan
+      doğru mimariyi kurmak ve <em>insanla birlikte çalışan</em>
       sistemler tasarlamak ise bir sanattır.
     </p>
 </div>
@@ -697,7 +707,7 @@ html[data-theme="dark"] .stat-label {
 <div class="about-inner">
 <div class="reveal">
 <p class="about-label">Kimiz</p>
-<h2>Teknolojiyi<br/>anlayan<br/>bir ekip.</h2>
+<h2>Teknolojiyi<br/><em>anlayan</em><br/>bir ekip.</h2>
 </div>
 <div class="about-right reveal">
 <p>FoxWiser, yapay zeka mühendisleri, veri bilimciler ve iş süreçleri uzmanlarından oluşan bağımsız bir teknoloji şirketidir. Kurumsal müşterilerle çalışarak AI'ın gerçek iş değeri yaratacağı noktaları belirler ve bu dönüşümü uçtan uca yönetiriz.</p>
@@ -719,7 +729,7 @@ html[data-theme="dark"] .stat-label {
 <!-- CTA -->
 <section class="cta-section" id="contact">
 <div class="cta-inner reveal">
-<h2>Projenizi<br/>konuşalım.</h2>
+<h2>Projenizi<br/><em>konuşalım.</em></h2>
 <p>Hangi aşamada olursanız olun — bir fikir, bir sorun ya da mevcut bir süreç — sizi dinlemeye hazırız.</p>
 <a class="btn btn-dark" href="mailto:hello@foxwiser.com">hello@foxwiser.com</a>
 <span class="cta-domain">www.foxwiser.com</span>
@@ -728,7 +738,7 @@ html[data-theme="dark"] .stat-label {
 <!-- FOOTER -->
 <footer>
 <a aria-label="FOX LAW" class="footer-logo" href="#">
-<img alt="FOX LAW logo" class="footer-logo-img" data-logo-dark="foxwiser_favicon_logo_pack_v2/._foxwiser_logo_color.svg" data-logo-light="Logo_V3_Light.svg" src="foxwiser_favicon_logo_pack_v2/foxwiser_logo_mono_light.svg"/>
+<img alt="FoxWiser logo" class="footer-logo-img" data-logo-dark="foxwiser_logo_mono_light_224h.png" data-logo-light="foxwiser_logo_mono_224h.png" src="foxwiser_logo_mono_224h.png"/>
 <span class="logo-text">FOX LAW</span>
 </a>
 <span class="footer-mid">Istanbul, Türkiye</span>
