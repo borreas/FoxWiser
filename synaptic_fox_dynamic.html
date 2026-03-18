@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synaptic Fox Dynamic</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #010409;
+    }
+    svg {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      background:
+        radial-gradient(circle at 50% 56%, rgba(58,128,255,.12), transparent 18%),
+        radial-gradient(circle at 46% 46%, rgba(85,170,255,.06), transparent 20%),
+        #010409;
+    }
+    .soft {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #guides { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+<svg viewBox="0 0 564.8 1095.93" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <filter id="dotGlow" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="3.4" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="lineGlow" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="2.4" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g id="guides">
+    <circle id="g_noseCircle" cx="467.67" cy="1008.31" r="45.33"/>
+    <path id="g_noseTail" d="M513.01,1040.31c-3.86,8.38-15.04,29.6-39.59,43.26-38.52,21.44-77.83,6.38-83.37,4.15-6.59-21.56-15.42-44.1-27.26-66.96-67.32-130.05-190-189.83-250.67-213.93"/>
+    <line id="g_whisker1" x1="119.38" y1="569.05" x2="33.16" y2="663.08"/>
+    <line id="g_whisker2" x1="95.16" y1="644.25" x2="8.93" y2="738.28"/>
+    <line id="g_whisker3" x1="95.16" y1="749.39" x2="8.93" y2="843.42"/>
+    <path id="g_eyeTop" d="M232.78,601.64c7.3-2.08,71.12-19.07,127.41,23.11,51.11,38.3,56.76,95.97,57.48,104.89"/>
+    <path id="g_eyeUnder" d="M232.78,616.01c8.53-2.11,61.12-14.19,107.78,18.81,27.08,19.16,39.28,44.4,44.15,56.44"/>
+    <path id="g_pupil" d="M290.19,623.71c.79,5.64,2.58,14.09,7.11,23.41,4.52,9.31,8.38,17.24,15.11,18.96,8.72,2.23,20.46-6.45,28.44-21.19-4.1-4.2-11.1-10.34-21.33-14.96-12.15-5.49-23.1-6.25-29.33-6.22Z"/>
+    <path id="g_cheekThin" d="M393.9,709.64c5.19,25.05,9.08,55.03,8.89,88.89-.44,77.85-22.28,139.89-40,178.67"/>
+    <line id="g_divider1" x1="447.67" y1="348.31" x2="447.67" y2="663.08"/>
+    <line id="g_divider2" x1="522.34" y1="320.05" x2="522.34" y2="634.82"/>
+    <path id="g_forehead" d="M282.19,270.97c22.05,11.67,78.67,37.83,153.48,30.67,62.73-6,107.32-32.47,128-46.67"/>
+    <path id="g_earOuter" d="M139.97,548.6c27.1-34.97,58.22-81.69,85.33-140.44,32.75-70.97,48.71-135.77,56.89-184.89-26.16-38.12-67.22-88.92-128-136.89C102.45,45.55,52.52,19.47,13.75,2.83c-10.68,57.9-19.97,148.51,0,256,25.86,139.17,88.02,237.99,126.22,289.78Z"/>
+  </g>
+
+  <path id="linksGlow" class="soft" stroke="#2d89ff" stroke-width="1.8" opacity="0" filter="url(#lineGlow)"></path>
+  <path id="linksSoft" class="soft" stroke="#74b8ff" stroke-width="1.1" opacity="0"></path>
+  <path id="linksCore" class="soft" stroke="#def2ff" stroke-width="0.82" opacity="0"></path>
+
+  <g id="seed" filter="url(#dotGlow)">
+    <circle id="seedOuter" cx="370" cy="700" r="18" fill="rgba(52,140,255,.20)"></circle>
+    <circle id="seedMid" cx="370" cy="700" r="8" fill="rgba(134,206,255,.34)"></circle>
+    <circle id="seedCore" cx="370" cy="700" r="3.2" fill="#eef8ff"></circle>
+  </g>
+
+  <g id="dots" filter="url(#dotGlow)"></g>
+</svg>
+
+<script>
+(() => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const dotsG = document.getElementById('dots');
+  const linksGlow = document.getElementById('linksGlow');
+  const linksSoft = document.getElementById('linksSoft');
+  const linksCore = document.getElementById('linksCore');
+  const seedOuter = document.getElementById('seedOuter');
+  const seedMid = document.getElementById('seedMid');
+  const seedCore = document.getElementById('seedCore');
+
+  const SEED = { x: 370, y: 700 };
+  const MILESTONES = [1, 2, 5, 25, 45, 105, 175];
+  const GROW_DURS = [2800, 3400, 4200, 5000, 6200, 8200];
+  const HOLD_MS = 2300;
+  const BURST_MS = 1150;
+  const COLLAPSE_DURS = [7600, 6200, 5000, 4200, 3400, 2800];
+  const GROW_TOTAL = GROW_DURS.reduce((a, b) => a + b, 0);
+  const COLLAPSE_TOTAL = BURST_MS + COLLAPSE_DURS.reduce((a, b) => a + b, 0);
+  const LOOP_MS = GROW_TOTAL + HOLD_MS + COLLAPSE_TOTAL;
+  const LINK_DIST = 72;
+  const LINK_DIST2 = LINK_DIST * LINK_DIST;
+
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function ease(t) { t = clamp(t, 0, 1); return 0.5 - 0.5 * Math.cos(Math.PI * t); }
+  function dist(x1, y1, x2, y2) { return Math.hypot(x2 - x1, y2 - y1); }
+  function hash(n) {
+    const x = Math.sin(n * 127.1 + 311.7) * 43758.5453123;
+    return x - Math.floor(x);
+  }
+
+  function samplePath(id, count, edge = true) {
+    const el = document.getElementById(id);
+    const len = el.getTotalLength();
+    const pts = [];
+    for (let i = 0; i < count; i++) {
+      const t = (i + 0.5) / count;
+      const pt = el.getPointAtLength(len * t);
+      pts.push({ x: pt.x, y: pt.y, edge });
+    }
+    return pts;
+  }
+
+  function buildTargets() {
+    const pts = [
+      ...samplePath('g_earOuter', 42, true),
+      ...samplePath('g_forehead', 18, true),
+      ...samplePath('g_divider1', 14, true),
+      ...samplePath('g_divider2', 12, true),
+      ...samplePath('g_eyeTop', 20, true),
+      ...samplePath('g_eyeUnder', 12, false),
+      ...samplePath('g_pupil', 10, true),
+      ...samplePath('g_cheekThin', 9, false),
+      ...samplePath('g_whisker1', 8, true),
+      ...samplePath('g_whisker2', 8, true),
+      ...samplePath('g_whisker3', 7, true),
+      ...samplePath('g_noseCircle', 14, true),
+      ...samplePath('g_noseTail', 16, true)
+    ];
+
+    pts.sort((a, b) => dist(a.x, a.y, SEED.x, SEED.y) - dist(b.x, b.y, SEED.x, SEED.y));
+
+    return pts.map((p, i) => {
+      const angle = Math.atan2(p.y - SEED.y, p.x - SEED.x);
+      const radius = dist(p.x, p.y, SEED.x, SEED.y);
+      const burstAngle = hash(i + 401) * Math.PI * 2;
+      const burstRadius = 85 + hash(i + 777) * 250;
+      return {
+        ...p,
+        rank: i,
+        angle,
+        radius,
+        driftSeed: hash(i + 1),
+        orbitSeed: hash(i + 91),
+        pairSeed: hash(i + 311),
+        burstAngle,
+        burstRadius,
+        sinkRadius: 8 + hash(i + 991) * 22
+      };
+    });
+  }
+
+  const nodes = buildTargets();
+  const circles = nodes.map((n) => {
+    const c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', SEED.x);
+    c.setAttribute('cy', SEED.y);
+    c.setAttribute('r', 0);
+    c.setAttribute('fill', n.edge ? '#eef8ff' : '#bfe3ff');
+    c.setAttribute('opacity', 0);
+    dotsG.appendChild(c);
+    return c;
+  });
+
+  function scheduleValue(values, durs, t) {
+    let acc = 0;
+    for (let i = 0; i < durs.length; i++) {
+      const d = durs[i];
+      if (t <= acc + d) {
+        const p = ease((t - acc) / d);
+        return lerp(values[i], values[i + 1], p);
+      }
+      acc += d;
+    }
+    return values[values.length - 1];
+  }
+
+  function stateAt(t) {
+    if (t < GROW_TOTAL) {
+      return {
+        mode: 'grow',
+        activeFloat: scheduleValue(MILESTONES, GROW_DURS, t),
+        morph: t / GROW_TOTAL,
+        syn: lerp(0.08, 1, t / GROW_TOTAL),
+        burst: 0,
+        decay: 1
+      };
+    }
+
+    if (t < GROW_TOTAL + HOLD_MS) {
+      return {
+        mode: 'hold',
+        activeFloat: MILESTONES[MILESTONES.length - 1],
+        morph: 1,
+        syn: 1,
+        burst: 0,
+        decay: 1
+      };
+    }
+
+    const local = t - GROW_TOTAL - HOLD_MS;
+    if (local < BURST_MS) {
+      return {
+        mode: 'burst',
+        activeFloat: MILESTONES[MILESTONES.length - 1],
+        morph: 1,
+        syn: lerp(1, 0.78, local / BURST_MS),
+        burst: ease(local / BURST_MS),
+        decay: 1
+      };
+    }
+
+    const collapseLocal = local - BURST_MS;
+    return {
+      mode: 'collapse',
+      activeFloat: scheduleValue([...MILESTONES].reverse(), COLLAPSE_DURS, collapseLocal),
+      morph: 0,
+      syn: 0.78 * (1 - collapseLocal / (COLLAPSE_TOTAL - BURST_MS)),
+      burst: 1,
+      decay: 1 - collapseLocal / (COLLAPSE_TOTAL - BURST_MS)
+    };
+  }
+
+  function formedPosition(node, time) {
+    const driftA = time * 0.00056 + node.driftSeed * 13;
+    const driftB = time * 0.00034 + node.orbitSeed * 17;
+    const micro = node.edge ? 1.2 : 0.7;
+    return {
+      x: node.x + Math.sin(driftA) * micro + Math.cos(driftB) * micro * 0.5,
+      y: node.y + Math.cos(driftA * 0.96) * micro + Math.sin(driftB * 1.08) * micro * 0.5
+    };
+  }
+
+  function burstPosition(node, time, burst, decay) {
+    const spin = (node.orbitSeed - 0.5) * 0.0058;
+    const orbitRadius = node.burstRadius * (0.28 + 0.72 * burst) * (0.65 + 0.35 * decay);
+    const orbitAngle = node.burstAngle + time * spin * 2.1 + Math.sin(time * 0.0017 + node.driftSeed * 14) * 0.7;
+    const driftAmp = 7 + 16 * decay;
+    return {
+      x: SEED.x + Math.cos(orbitAngle) * orbitRadius + Math.sin(time * 0.0011 + node.pairSeed * 21) * driftAmp,
+      y: SEED.y + Math.sin(orbitAngle) * orbitRadius + Math.cos(time * 0.0014 + node.orbitSeed * 19) * driftAmp
+    };
+  }
+
+  function positionFor(node, st, time) {
+    const reveal = ease(clamp(st.activeFloat - node.rank, 0, 1));
+
+    const baseSpin = (node.orbitSeed - 0.5) * 0.0042;
+    const angleJitter = Math.sin(time * 0.00135 + node.orbitSeed * 20) * 0.48;
+    const orbitAngle = node.angle + time * baseSpin + angleJitter;
+    const orbitRadius = node.radius * (0.06 + 0.86 * reveal);
+    const swirlStrength = (1 - st.morph) * (1.0 + node.orbitSeed * 1.3);
+    const swirlX = Math.cos(orbitAngle) * orbitRadius * (0.58 + swirlStrength * 0.42);
+    const swirlY = Math.sin(orbitAngle) * orbitRadius * (0.58 + swirlStrength * 0.42);
+
+    const driftAmp = (1 - st.morph) * (node.edge ? 18 : 14) + 2.1;
+    const a = time * 0.00062 + node.driftSeed * 15;
+    const b = time * 0.00041 + node.orbitSeed * 17;
+    const driftX = Math.sin(a) * driftAmp + Math.cos(b) * driftAmp * 0.32;
+    const driftY = Math.cos(a * 0.97) * driftAmp + Math.sin(b * 1.06) * driftAmp * 0.32;
+
+    if (st.mode === 'grow') {
+      const preX = SEED.x + swirlX + driftX;
+      const preY = SEED.y + swirlY + driftY;
+      const k = Math.pow(st.morph, 1.25) * reveal;
+      return {
+        x: lerp(preX, node.x + driftX * 0.15, k),
+        y: lerp(preY, node.y + driftY * 0.15, k)
+      };
+    }
+
+    if (st.mode === 'hold') {
+      return formedPosition(node, time);
+    }
+
+    const from = formedPosition(node, time);
+    const random = burstPosition(node, time, st.burst, st.decay);
+
+    if (st.mode === 'burst') {
+      return {
+        x: lerp(from.x, random.x, st.burst),
+        y: lerp(from.y, random.y, st.burst)
+      };
+    }
+
+    const decay = st.decay;
+    const sinkAngle = node.burstAngle + time * (baseSpin * 1.8);
+    const sinkX = SEED.x + Math.cos(sinkAngle) * node.sinkRadius;
+    const sinkY = SEED.y + Math.sin(sinkAngle) * node.sinkRadius;
+
+    return {
+      x: lerp(random.x, sinkX, Math.pow(1 - decay, 0.9)),
+      y: lerp(random.y, sinkY, Math.pow(1 - decay, 0.9))
+    };
+  }
+
+  function renderSeed(st, time) {
+    const pulse = 0.82 + 0.18 * Math.sin(time * 0.0027);
+    const shrinkBase = st.mode === 'burst' ? 0.24 : (st.mode === 'collapse' ? 0.24 + (1 - st.decay) * 0.76 : 1 - (st.morph || 0) * 0.72);
+    seedOuter.setAttribute('r', (18 * shrinkBase * pulse).toFixed(2));
+    seedMid.setAttribute('r', (8 * shrinkBase * pulse).toFixed(2));
+    seedCore.setAttribute('r', Math.max(2.4, 3.5 * shrinkBase * pulse).toFixed(2));
+    seedOuter.setAttribute('fill', `rgba(52,140,255,${(0.18 * pulse).toFixed(3)})`);
+    seedMid.setAttribute('fill', `rgba(134,206,255,${(0.34 * pulse).toFixed(3)})`);
+  }
+
+  function draw(now) {
+    const t = now % LOOP_MS;
+    const st = stateAt(t);
+    renderSeed(st, now);
+
+    const visible = [];
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      const reveal = clamp(st.activeFloat - i, 0, 1);
+      if (reveal <= 0) {
+        circles[i].setAttribute('r', 0);
+        circles[i].setAttribute('opacity', 0);
+        continue;
+      }
+
+      const p = positionFor(node, st, now);
+      const radius = (node.edge ? 1.9 : 1.4) + reveal * (node.edge ? 1.12 : 0.78);
+      const lifeMul = st.mode === 'collapse' ? Math.max(0.04, st.decay) : 1;
+      const opacity = (0.18 + 0.82 * reveal) * lifeMul;
+
+      circles[i].setAttribute('cx', p.x.toFixed(2));
+      circles[i].setAttribute('cy', p.y.toFixed(2));
+      circles[i].setAttribute('r', radius.toFixed(2));
+      circles[i].setAttribute('opacity', opacity.toFixed(3));
+
+      visible.push({ x: p.x, y: p.y, reveal, edge: node.edge, seed: node.pairSeed, rank: i });
+    }
+
+    let glowD = '';
+    let softD = '';
+    let coreD = '';
+
+    for (let i = 0; i < visible.length; i++) {
+      const a = visible[i];
+      for (let j = i + 1; j < visible.length; j++) {
+        const b = visible[j];
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 > LINK_DIST2) continue;
+
+        const d = Math.sqrt(d2);
+        const proximity = 1 - d / LINK_DIST;
+        const flicker = 0.45 + 0.55 * ((Math.sin((a.seed + b.seed + now * 0.00018) * 18) + 1) * 0.5);
+        if (flicker < 0.42) continue;
+        if (Math.abs(a.rank - b.rank) > 28 && !(a.edge || b.edge)) continue;
+
+        const seg = `M${a.x.toFixed(1)} ${a.y.toFixed(1)}L${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
+
+        if (proximity > 0.7 || ((a.edge || b.edge) && proximity > 0.48)) {
+          coreD += seg;
+        } else if (proximity > 0.42) {
+          softD += seg;
+        } else {
+          glowD += seg;
+        }
+      }
+    }
+
+    linksGlow.setAttribute('d', glowD);
+    linksSoft.setAttribute('d', softD);
+    linksCore.setAttribute('d', coreD);
+
+    const syn = Math.max(0, st.syn);
+    linksGlow.setAttribute('opacity', (0.05 + syn * 0.13).toFixed(3));
+    linksSoft.setAttribute('opacity', (0.08 + syn * 0.18).toFixed(3));
+    linksCore.setAttribute('opacity', (0.11 + syn * 0.23).toFixed(3));
+
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
