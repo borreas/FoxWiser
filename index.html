@@ -5,9 +5,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>FOX LAW — Legal AI</title>
-<link id="siteFavicon" rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg">
-<link rel="shortcut icon" href="favicon.svg">
-<link rel="apple-touch-icon" href="favicon.svg">
+<link id="siteFavicon" rel="icon" type="image/svg+xml" sizes="any" href="favicon-light.svg">
+<link id="siteFaviconPng" rel="icon" type="image/png" sizes="32x32" href="favicon-light-32.png">
+<link id="siteShortcutIcon" rel="shortcut icon" href="favicon.ico">
+<link id="siteAppleTouchIcon" rel="apple-touch-icon" sizes="180x180" href="favicon-light-180.png">
 <link rel="manifest" href="site.webmanifest">
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -130,8 +131,8 @@ nav {
   z-index: 201;
 }
 .logo-img {
-  height: clamp(64px, 4.8vw, 92px);
-width: auto;
+  height: clamp(46px, 3.6vw, 58px);
+  width: auto;
   display: block;
 }
 
@@ -145,8 +146,6 @@ width: auto;
   -webkit-filter: drop-shadow(0 1px 1px rgba(15, 23, 42, 0.22))
           drop-shadow(0 10px 18px rgba(15, 23, 42, 0.18))
           drop-shadow(0 28px 48px rgba(15, 23, 42, 0.14));
-  height: 56px;
-  width: auto;
 }
 
 
@@ -255,7 +254,7 @@ html:not([data-theme="dark"]) .theme-toggle svg.moon{ display:none; }
 /* Mobile menu */
 .mobile-menu {
   display: none;
-  position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
+  position: fixed; top: 88px; left: 0; right: 0; bottom: 0;
   background: var(--nav-bg-solid);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -500,7 +499,7 @@ footer {
   flex-wrap: wrap; gap: 0.75rem;
 }
 .footer-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
-.footer-logo-img { height: 64px; width: auto; display: block; }
+.footer-logo-img { height: 54px; width: auto; display: block; }
 .footer-mid, .footer-right { font-size: 0.78rem; color: var(--ink-60); }
 
 /* ─── REVEAL ─── */
@@ -513,10 +512,14 @@ footer {
 
 /* ─── MOBILE ─── */
 @media (max-width: 767px) {
+  nav { height: 80px; }
+  .logo-img { height: 44px; }
+  .footer-logo-img { height: 48px; }
+
   /* Show hamburger, hide desktop nav */
   .nav-desktop { display: none; }
   .hamburger  { display: flex; }
-  .mobile-menu { display: flex; }
+  .mobile-menu { display: flex; top: 80px; }
 
   /* Hero */
   .hero { padding: 7rem 6vw 5rem; min-height: 100svh; }
@@ -595,7 +598,7 @@ html[data-theme="dark"] .stat-label {
 <!-- NAV -->
 <nav>
 <a aria-label="FoxWiser" class="logo" href="index.html">
-<img alt="FoxWiser logo" class="logo-img" data-logo-dark="foxwiser_logo_mono_light.svg" data-logo-light="foxwiser_logo_mono.svg" src="foxwiser_logo_mono.svg"/>
+<img alt="FoxWiser logo" class="logo-img" data-logo-dark="foxwiserlaw-header-dark.svg" data-logo-dark-mobile="foxwiserlaw-mobile-dark.svg" data-logo-light="foxwiserlaw-header-light.svg" data-logo-light-mobile="foxwiserlaw-mobile-light.svg" src="foxwiserlaw-header-light.svg"/>
 <span class="logo-text">FoxWiser</span>
 </a>
 <!-- Desktop -->
@@ -733,7 +736,7 @@ html[data-theme="dark"] .stat-label {
 <!-- FOOTER -->
 <footer>
 <a aria-label="FoxWiser" class="footer-logo" href="#">
-<img alt="FoxWiser logo" class="footer-logo-img" data-logo-dark="foxwiser_logo_mono_light.svg" data-logo-light="foxwiser_logo_mono.svg" src="foxwiser_logo_mono.svg"/>
+<img alt="FoxWiser logo" class="footer-logo-img" data-logo-dark="foxwiserlaw-header-dark.svg" data-logo-light="foxwiserlaw-header-light.svg" src="foxwiserlaw-header-light.svg"/>
 <span class="logo-text">FoxWiser</span>
 </a>
 <span class="footer-mid">Istanbul, Türkiye</span>
@@ -759,30 +762,40 @@ html[data-theme="dark"] .stat-label {
     });
   });
 
-/* ── Theme toggle ── */
+/* ── Theme + responsive brand assets ── */
 const root = document.documentElement;
 const toggle = document.getElementById('themeToggle');
-const updateLogos = () => {
+const brandMediaQuery = window.matchMedia('(max-width: 767px)');
+
+const updateBrandAssets = () => {
   const isDark = root.getAttribute('data-theme') === 'dark';
+  const isMobile = brandMediaQuery.matches;
+
   document.querySelectorAll('img[data-logo-light]').forEach(img => {
-    img.src = isDark ? img.dataset.logoDark : img.dataset.logoLight;
+    const nextSrc = (isMobile && img.dataset.logoLightMobile)
+      ? (isDark ? img.dataset.logoDarkMobile : img.dataset.logoLightMobile)
+      : (isDark ? img.dataset.logoDark : img.dataset.logoLight);
+    img.src = nextSrc;
   });
-  const favicon = document.getElementById('siteFavicon');
-  if (favicon) favicon.href = isDark ? 'favicon-light.svg' : 'favicon.svg';
-  document.querySelectorAll('link[rel="shortcut icon"], link[rel="apple-touch-icon"]').forEach(link => {
-    link.href = isDark ? 'favicon-light.svg' : 'favicon.svg';
-  });
+
+  const faviconSvg = document.getElementById('siteFavicon');
+  const faviconPng = document.getElementById('siteFaviconPng');
+  const appleTouch = document.getElementById('siteAppleTouchIcon');
+
+  if (faviconSvg) faviconSvg.href = isDark ? 'favicon-dark.svg' : 'favicon-light.svg';
+  if (faviconPng) faviconPng.href = isDark ? 'favicon-dark-32.png' : 'favicon-light-32.png';
+  if (appleTouch) appleTouch.href = isDark ? 'favicon-dark-180.png' : 'favicon-light-180.png';
 };
 
 const applyTheme = (t) => {
   if (t === 'dark') root.setAttribute('data-theme','dark');
   else root.removeAttribute('data-theme');
-  updateLogos();
+  updateBrandAssets();
 };
 
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) applyTheme(savedTheme);
-else updateLogos();
+else updateBrandAssets();
 
 toggle?.addEventListener('click', () => {
   const isDark = root.getAttribute('data-theme') === 'dark';
@@ -790,6 +803,12 @@ toggle?.addEventListener('click', () => {
   applyTheme(next === 'dark' ? 'dark' : 'light');
   localStorage.setItem('theme', next);
 });
+
+if (typeof brandMediaQuery.addEventListener === 'function') {
+  brandMediaQuery.addEventListener('change', updateBrandAssets);
+} else if (typeof brandMediaQuery.addListener === 'function') {
+  brandMediaQuery.addListener(updateBrandAssets);
+}
 
   /* ── Desktop nav hover indicator ── */
   (() => {

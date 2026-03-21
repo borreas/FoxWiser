@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" version="1.1" viewBox="0 0 32.05 58.35">
+  
+  <defs>
+    <style>
+      .st0 {
+        fill: #F8FAFC;
+      }
+    </style>
+  </defs>
+  <g id="terazi">
+    <g>
+      <path class="st0" d="M9.77,10.8H3.71l-.08,1.28v31.3h0c.02,4.38.04,9.1.06,14.11.08.11,1.22.88,3.2.82,1.64-.04,2.54-.53,2.77-.84.03-.04.04-.09.04-.14v-13.96h0c.05-13.23.07-29.31,0-31.07,0-.14-.04-.71.06-1.51h.01Z" fill="#F8FAFC" />
+      <rect class="st0" x="0" y="26.19" width="18.36" height="2.03" rx=".54" ry=".54" transform="translate(-1.23 .45) rotate(-2.61)" fill="#F8FAFC" />
+      <path class="st0" d="M18.12,0C10.3,0,3.72,3.03,3.72,10.86h28.33C32.05,3.04,26.07,0,18.13,0h0ZM13.72,8.91l1.15-6.18,2.63,5.75-3.79.43h.01ZM18.25,8.49l2.5-5.77,1.29,6.19-3.79-.42Z" fill="#F8FAFC" />
+    </g>
+  </g>
+</svg>

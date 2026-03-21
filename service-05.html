@@ -5,9 +5,10 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Özel AI Ürün Geliştirme — FOX LAW</title>
-<link id="siteFavicon" rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg">
-<link rel="shortcut icon" href="favicon.svg">
-<link rel="apple-touch-icon" href="favicon.svg">
+<link id="siteFavicon" rel="icon" type="image/svg+xml" sizes="any" href="favicon-light.svg">
+<link id="siteFaviconPng" rel="icon" type="image/png" sizes="32x32" href="favicon-light-32.png">
+<link id="siteShortcutIcon" rel="shortcut icon" href="favicon.ico">
+<link id="siteAppleTouchIcon" rel="apple-touch-icon" sizes="180x180" href="favicon-light-180.png">
 <link rel="manifest" href="site.webmanifest">
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -18,7 +19,7 @@
 <body>
 <nav>
 <a aria-label="FoxWiser" class="logo" href="index.html">
-<img alt="FoxWiser logo" class="logo-img" data-logo-dark="foxwiser_logo_mono_light.svg" data-logo-light="foxwiser_logo_mono.svg" src="foxwiser_logo_mono.svg"/>
+<img alt="FoxWiser logo" class="logo-img" data-logo-dark="foxwiserlaw-header-dark.svg" data-logo-dark-mobile="foxwiserlaw-mobile-dark.svg" data-logo-light="foxwiserlaw-header-light.svg" data-logo-light-mobile="foxwiserlaw-mobile-light.svg" src="foxwiserlaw-header-light.svg"/>
 <span class="logo-text">FoxWiser</span>
 </a>
 <ul aria-label="Üst menü" class="nav-desktop">
@@ -68,45 +69,60 @@
 </main>
 <footer>
 <a aria-label="FoxWiser" class="footer-logo" href="index.html">
-<img alt="FoxWiser logo" class="footer-logo-img" data-logo-dark="foxwiser_logo_mono_light.svg" data-logo-light="foxwiser_logo_mono.svg" src="foxwiser_logo_mono.svg"/>
+<img alt="FoxWiser logo" class="footer-logo-img" data-logo-dark="foxwiserlaw-header-dark.svg" data-logo-light="foxwiserlaw-header-light.svg" src="foxwiserlaw-header-light.svg"/>
 <span class="logo-text">FoxWiser</span>
 </a>
 <span class="footer-mid">Istanbul, Türkiye</span>
 <span class="footer-right">© 2025 FoxWiser</span>
 </footer>
 <script>
-  // Theme
-  const root = document.documentElement;
-  const toggle = document.getElementById('themeToggle');
+// Theme + responsive brand assets
+const root = document.documentElement;
+const toggle = document.getElementById('themeToggle');
+const brandMediaQuery = window.matchMedia('(max-width: 767px)');
 
-  const updateLogos = () => {
-    const isDark = root.getAttribute('data-theme') === 'dark';
-    document.querySelectorAll('img[data-logo-light]').forEach(img => {
-      img.src = isDark ? img.dataset.logoDark : img.dataset.logoLight;
-    });
-    const favicon = document.getElementById('siteFavicon');
-    if (favicon) favicon.href = isDark ? 'favicon-light.svg' : 'favicon.svg';
-    document.querySelectorAll('link[rel="shortcut icon"], link[rel="apple-touch-icon"]').forEach(link => {
-      link.href = isDark ? 'favicon-light.svg' : 'favicon.svg';
-    });
-  };
+const updateBrandAssets = () => {
+  const isDark = root.getAttribute('data-theme') === 'dark';
+  const isMobile = brandMediaQuery.matches;
 
-  const applyTheme = (t) => {
-    if (t === 'dark') root.setAttribute('data-theme','dark');
-    else root.removeAttribute('data-theme');
-    updateLogos();
-  };
-
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) applyTheme(savedTheme);
-  else updateLogos();
-
-  toggle?.addEventListener('click', () => {
-    const isDark = root.getAttribute('data-theme') === 'dark';
-    const next = isDark ? 'light' : 'dark';
-    applyTheme(next === 'dark' ? 'dark' : 'light');
-    localStorage.setItem('theme', next);
+  document.querySelectorAll('img[data-logo-light]').forEach(img => {
+    const nextSrc = (isMobile && img.dataset.logoLightMobile)
+      ? (isDark ? img.dataset.logoDarkMobile : img.dataset.logoLightMobile)
+      : (isDark ? img.dataset.logoDark : img.dataset.logoLight);
+    img.src = nextSrc;
   });
+
+  const faviconSvg = document.getElementById('siteFavicon');
+  const faviconPng = document.getElementById('siteFaviconPng');
+  const appleTouch = document.getElementById('siteAppleTouchIcon');
+
+  if (faviconSvg) faviconSvg.href = isDark ? 'favicon-dark.svg' : 'favicon-light.svg';
+  if (faviconPng) faviconPng.href = isDark ? 'favicon-dark-32.png' : 'favicon-light-32.png';
+  if (appleTouch) appleTouch.href = isDark ? 'favicon-dark-180.png' : 'favicon-light-180.png';
+};
+
+const applyTheme = (t) => {
+  if (t === 'dark') root.setAttribute('data-theme','dark');
+  else root.removeAttribute('data-theme');
+  updateBrandAssets();
+};
+
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) applyTheme(savedTheme);
+else updateBrandAssets();
+
+toggle?.addEventListener('click', () => {
+  const isDark = root.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  applyTheme(next === 'dark' ? 'dark' : 'light');
+  localStorage.setItem('theme', next);
+});
+
+if (typeof brandMediaQuery.addEventListener === 'function') {
+  brandMediaQuery.addEventListener('change', updateBrandAssets);
+} else if (typeof brandMediaQuery.addListener === 'function') {
+  brandMediaQuery.addListener(updateBrandAssets);
+});
 
   // Hover indicator
   (() => {
